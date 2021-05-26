@@ -1,0 +1,38 @@
+import requests
+
+headers = {
+    'Connection': 'keep-alive',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
+    'Accept-Language': 'en-US',
+    'sec-ch-ua-mobile': '?0',
+    'Authorization': 'OAuth *****************',
+    'Content-Type': 'text/plain;charset=UTF-8',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+    'Client-Id': '***********************',
+    'X-Device-Id': '***************',
+    'Accept': '*/*',
+    'Origin': 'https://www.twitch.tv',
+    'Sec-Fetch-Site': 'same-site',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Referer': 'https://www.twitch.tv/',
+}
+
+data = '[{"operationName":"Consent","variables":{"id":"16dc428d-cabf-43ba-b30f-37b33fb96f49","includeNewCookieConsentFields":true},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2a87d8c78d15949c942110d894b7c8168910b026627e6cf9e2516ca4ccc68d66"}}},{"operationName":"Ads_Components_AdManager_User","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"b0b7b4db74ab3f556f680709cf0335169ac644eb280595f59e30e4ec3fea6178"}}},{"operationName":"TopNav_CurrentUser","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"80c8ad4839b2922ac5ea7a6e38d8c88ab4c0462cf1c7f2d4d86542736ff3f916"}}},{"operationName":"Prime_PrimeOffers_CurrentUser","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"a773b7efefe390d49753520f7db73d03794b008af6acc22c06a2c630d46d5518"}}},{"operationName":"UserMenuCurrentUser","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"3fafec9996208e9c38f39893cc8cf7ed1933c77daff806b8171a1be54625b620"}}},{"operationName":"PersonalSections","variables":{"input":{"sectionInputs":["FOLLOWED_SECTION","RECOMMENDED_SECTION"],"recommendationContext":{"platform":"web"}},"channelLogin":null,"withChannelUser":false},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"156c235ae84585c1252fdcf47636c0773af1f67db48c1091e56ded42c548fd43"}}},{"operationName":"DropCurrentSessionContext","variables":{},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2e4b3630b91552eb05b76a94b6850eb25fe42263b7cf6d06bee6d156dd247c1c"}}}]'
+
+response = requests.post('https://gql.twitch.tv/gql', headers=headers, data=data)
+
+
+jsn = response.json()
+
+followedStreamerData = jsn[5]["data"]["personalSections"][0]["items"]
+
+for i in followedStreamerData:
+  try:
+    try:
+      print (i["user"]["displayName"] +": "+str(i["content"]["viewersCount"]))
+    except KeyError:
+      print("",end="")
+  except TypeError:
+    print("",end="")
+
